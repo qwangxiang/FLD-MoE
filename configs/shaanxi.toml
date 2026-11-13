@@ -1,0 +1,83 @@
+# FLD-MoE: fixed Shaanxi parameters, using all gate features.
+[data]
+train_stride = 96
+feature_normalization_window_days = 14
+loss_scale_floor_ratio = 0.8236078190253296
+
+[model]
+width = 32
+num_layers = 3
+kernel_size = 3
+dropout = 0.05
+num_experts = 5
+cut_quantiles = [
+    0.33142700434300343,
+    0.5332680736040193,
+    0.7043265954075196,
+    0.8580315864395707,
+]
+
+[distribution]
+backbone_learning_rate = 0.00013870949974037364
+backbone_weight_decay = 0.0001
+head_learning_rate = 0.0004961086043610535
+head_weight_decay = 0.01
+gradient_clip_norm = 0.5816634047983731
+epsilon = 1e-09
+grid_points = 902
+initialization_split_price = 325.3738414089184
+
+[expert_training]
+max_epochs = 600
+patience = 10
+min_delta = 1e-05
+mass_floor_ratio = 0.04567798503768082
+scheduler_factor = 0.2156127291386286
+scheduler_patience = 20
+scheduler_min_learning_rate = 1e-20
+
+[expert_training.price_segment_weight_schedule]
+start = 1.0
+end = 0.0
+warmup_epochs = 40
+anneal_start_epoch = 35
+
+[expert_training.responsibility_temperature_schedule]
+start = 4.497598771078046
+end = 0.20820498724115863
+warmup_epochs = 30
+anneal_start_epoch = 15
+
+[xgboost_gate]
+max_depth = 5
+max_boost_rounds = 500
+early_stopping_rounds = 10
+inner_validation_days = 28
+prior_uniform_epsilon = 0.11297350840980035
+gate_temperature = 0.5559958172995038
+learning_rate = 0.05672721839516873
+subsample = 0.6700426416842998
+colsample_bytree = 0.7999943217968564
+min_child_weight = 0.12027821345988017
+max_delta_step = 10.0
+nthread = -1
+
+[runtime]
+seed = 42
+device = "auto"
+batch_size = 16
+inference_batch_size = 64
+num_workers = 0
+
+[dataset]
+path = "../data/shaanxi.csv"
+validation_days = 30
+test_days = 45
+warmup_days = 28
+main_history_start_day = 7
+gate_history_start_day = 14
+tail_threshold = 400.0
+price_bounds = [
+    { from = "2025-01-01", floor = 40.0, cap = 1000.0 },
+    { from = "2026-01-01", floor = 0.0, cap = 1000.0 },
+]

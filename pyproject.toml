@@ -1,0 +1,32 @@
+[project]
+name = "fld-moe"
+version = "0.1.0"
+description = "Forecast-loss-driven mixture of experts for electricity price forecasting"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+dependencies = [
+    "chinese-calendar>=1.11,<2",
+    "numpy>=2.0,<3",
+    "pandas>=2.2,<4",
+    "torch>=2.9,<3",
+    "xgboost>=3.0,<4",
+]
+
+[project.scripts]
+fld-moe = "fld_moe.cli:main"
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fld_moe"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
